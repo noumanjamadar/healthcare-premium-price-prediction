@@ -86,10 +86,10 @@ st.markdown("""
 # -------------------------------------------------
 # LOAD MODELS & SCALERS
 # -------------------------------------------------
-MODEL_OLD_PATH = "models/xgb_model_old_gr.joblib"
-MODEL_YOUNG_PATH = "models/model_young_gr.joblib"
-SCALER_OLD_PATH = "models/scaler_old_gr.joblib"
-SCALER_YOUNG_PATH = "models/scaler_young_gr.joblib"
+MODEL_OLD_PATH = "models/xgb_model_old_gr"
+MODEL_YOUNG_PATH = "models/model_young_gr"
+SCALER_OLD_PATH = "models/scaler_old_gr"
+SCALER_YOUNG_PATH = "models/scaler_young_gr"
 
 
 COLS_TO_SCALE = [
@@ -290,3 +290,4 @@ with right:
         except Exception as e:
             st.error("Prediction failed.")
             st.exception(e)
+
