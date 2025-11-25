@@ -202,7 +202,7 @@ with left:
 
     c1, c2 = st.columns(2)
     age = c1.number_input("Age", 1, 120, 30)
-    income_lakhs = c2.number_input("Annual Income (Lakhs)", 0.0, 200.0, 5.0)
+    income_lakhs = c2.number_input("Annual Income (Lakhs)", 0.0, 200.0, 5.0,step=0.5)
 
     number_of_dependants = st.selectbox("Dependants", [0,1,2,3,4,5])
 
@@ -289,3 +289,4 @@ if st.button("Predict Premium"):
     except Exception as e:
         st.error("Prediction failed.")
         st.exception(e)
+
