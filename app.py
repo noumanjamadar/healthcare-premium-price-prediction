@@ -221,9 +221,9 @@ with left:
 
 
 # ---------------- RIGHT SIDE -------------------
+# ---------------- RIGHT SIDE -------------------
 with right:
 
-    # Medical History
     st.markdown("<div class='glass-card'><div class='sub-head'>🧬 Medical History</div></div>", unsafe_allow_html=True)
 
     diseases = st.multiselect(
@@ -234,20 +234,21 @@ with right:
 
     insurance_plan = st.selectbox("Insurance Plan", ["Bronze","Silver","Gold"])
 
-    # Prepare values
+    # ⭐ NEW: Genetical Risk Slider (0-5)
+    genetical_risk_slider = st.slider("Genetical Risk Factor", min_value=0, max_value=5, value=0)
+
     insurance_code = {"Bronze":1, "Silver":2, "Gold":3}[insurance_plan]
-    genetical_risk = 0
     total_disease_risk = sum(RISK_SCORES.get(d.lower(), 0) for d in diseases)
     normalized_risk_score = (total_disease_risk - MIN_SCORE) / (MAX_SCORE - MIN_SCORE)
     income_level = map_income_to_level(income_lakhs)
 
+    # Base Inputs
     inputs = {
         "age": age,
         "number_of_dependants": number_of_dependants,
         "insurance_plan": insurance_code,
         "income_lakhs": income_lakhs,
         "income_level": income_level,
-        "genetical_risk": genetical_risk,
         "normalized_risk_score": normalized_risk_score,
         "gender": gender,
         "region": region,
@@ -257,37 +258,34 @@ with right:
         "employment_status": employment_status
     }
 
+# -------------------------------------------------
+# Prediction Logic
+# -------------------------------------------------
+if st.button("Predict Premium"):
 
-    # ------------ PREDICTION BUTTON + LOGIC -------------
-    if st.button("Predict Premium"):
+    try:
+        # 👍 Apply your rule
+        if age <= 25:
+            model = model_young
+            scaler = scaler_young
+            inputs["genetical_risk"] = genetical_risk_slider  # use actual value
+        else:
+            model = model_old
+            scaler = scaler_old
+            inputs["genetical_risk"] = 0  # 🛑 force zero
 
-        try:
-            # Build scaler input
-            df_scale = build_scaler_input(inputs)
+        df_scale = build_scaler_input(inputs)
+        scaled_arr = scaler.transform(df_scale)
+        scaled_dict = dict(zip(COLS_TO_SCALE, scaled_arr.flatten()))
 
-            # Select scaler + model based on age
-            if age <= 25:
-                scaler = scaler_young
-                model = model_young
-            else:
-                scaler = scaler_old
-                model = model_old
+        X_final = build_model_input_from_scaled(scaled_dict, inputs)
+        X_final = X_final.reindex(columns=MODEL_COLUMNS, fill_value=0)
 
-            # Scale
-            scaled_arr = scaler.transform(df_scale)
-            scaled_dict = dict(zip(COLS_TO_SCALE, scaled_arr.flatten()))
+        pred = model.predict(X_final)[0]
 
-            # Build final model input
-            X_final = build_model_input_from_scaled(scaled_dict, inputs)
-            X_final = X_final.reindex(columns=MODEL_COLUMNS, fill_value=0)
+        st.markdown(f"<div class='pred-box'>💰 Estimated Premium: ₹ {pred:,.2f}</div>",
+                    unsafe_allow_html=True)
 
-            # Predict
-            pred = model.predict(X_final)[0]
-
-            st.markdown(f"<div class='pred-box'>💰 Estimated Premium: ₹ {pred:,.2f}</div>",
-                        unsafe_allow_html=True)
-
-        except Exception as e:
-            st.error("Prediction failed.")
-            st.exception(e)
-
+    except Exception as e:
+        st.error("Prediction failed.")
+        st.exception(e)
