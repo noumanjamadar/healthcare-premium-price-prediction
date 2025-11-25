@@ -1,7 +1,7 @@
 # 🏥 Healthcare Premium Price Prediction  
 
 ![Python](https://img.shields.io/badge/Python-3.8+-blue.svg) 
-![Scikit-Learn](https://img.shields.io/badge/ML-GradientBoosting%20%7C%20XGBoost-orange)
+![Scikit-Learn](https://img.shields.io/badge/ML-LinearRegression%20%7C%20XGBoost-orange)
 ![VIF](https://img.shields.io/badge/Feature--Selection-VIF-green)
 ![RMSE](https://img.shields.io/badge/RMSE-Low-brightgreen)
 ![R² Score](https://img.shields.io/badge/R²-High-blue)
@@ -19,7 +19,7 @@
 - [Key Learnings](#-key-learnings)  
 - [Results](#-results)  
 - [Tools & Technologies Used](#-tools--technologies-used)  
-- [Skills Demonstrated](#-skills-demonstrated)  
+- [Skills Demonstrated](#%E2%80%8D-skills-demonstrated)  
 - [Connect with Me](#-connect-with-me)  
 
 ---
@@ -32,8 +32,8 @@ During model development, an insight from **Error Analysis** showed:
 > Premium pricing behavior significantly differs by Age Group.
 
 So, a **dual-model strategy** was implemented:
-- Model for Age **≤ 25** (Young Group)
-- Model for Age **> 25** (Adult Group)
+- Linear Regression → Age **≤ 25**
+- XGBoost Regressor → Age **> 25**
 
 Multicollinearity was reduced using **Variance Inflation Factor (VIF)** for a more stable and interpretable ML solution.
 
@@ -41,34 +41,33 @@ Multicollinearity was reduced using **Variance Inflation Factor (VIF)** for a mo
 
 ## ❗ Problem Statement  
 
-**Shield Insurance Company** faced challenges in accurate pricing of healthcare premiums due to:
-- Diverse age and lifestyle groups
-- Different medical & genetic risk profiles
-- High variance in health-related costs
+**Shield Insurance Company** faced challenges in accurate pricing due to:
+- Diverse customer age segments
+- Medical & genetic risk variations
+- Fluctuating healthcare expenditure
 
 🎯 **Goal:**  
-Develop a Machine Learning model that **predicts premium amounts** based on:
-- Demographic features  
-- Lifestyle factors  
-- Health risk indicators  
-- Insurance plan type  
+Develop an ML model to **predict premium price** using:
+- Demographics
+- Lifestyle patterns
+- Risk scores
+- Plan type  
 
-✨ Expected Outcome:
-- Fair & risk-based pricing  
-- Better underwriting decisions  
-- Reduced claim loss ratios  
-- Improved customer satisfaction  
+✨ Business Benefits:
+- Fair and risk-based pricing  
+- Improved underwriting  
+- Higher profitability  
 
 ---
 
 ## 📂 Dataset  
 
-Includes critical real-world insurance variables:
-- Age, BMI, genetic risk
-- Region, gender, marital status
-- Employment & smoking behavior
-- Medical history
-- Insurance plan category
+Includes real-world factors such as:
+- **Age, BMI, genetic risk**
+- **Gender, Region, Marital Status**
+- **Smoking & Employment**
+- **Insurance Plan Type**
+- **Medical conditions**
 
 🎯 **Target Variable:**  
 `premium_amount`
@@ -81,151 +80,142 @@ Includes critical real-world insurance variables:
 |---------|----------|
 | Demographics | age, gender, region, marital_status |
 | Lifestyle | smoking_status, employment_status |
-| Health Risk | bmi, normalized_risk_score, genetical_risk |
-| Policy Factors | insurance_plan, income_level, medical_history |
+| Health Risk | bmi_category, normalized_risk_score, genetical_risk |
+| Policy Details | insurance_plan, income_level |
 
 ---
 
 ## 🛠 Project Workflow  
 
-### 🔍 1️⃣ Exploratory Data Analysis (EDA)
-- Outlier detection
-- Risk vs Premium relationships
-- Correlation patterns
+### 🔍 1️⃣ Exploratory Data Analysis
+- Outlier & distribution study  
+- Correlation insights  
 
 ### 🧹 2️⃣ Data Preprocessing
-- Handled missing & inconsistent data
-- Encoding:
-  - Label Encoding → insurance_plan
-  - One-Hot Encoding → other categoricals
+- Categorical encoding  
+- Missing value handling  
 
 ### ⚙️ 3️⃣ Feature Engineering
 - Added **genetical_risk**
 - Used **normalized_risk_score**
-- **VIF** to remove multicollinearity
+- Removed multicollinearity using **VIF**
 
-### 🔀 4️⃣ Model Strategy (Age-based Segmentation)
-- Group A: Age ≤ 25
-- Group B: Age > 25
+### 🔀 4️⃣ Model Strategy (Key Insight)
+- Age-based segmentation for better performance
 
-### 🧪 5️⃣ Model Training + Scaling
-- **StandardScaler** for each group
-- Models:
-  - Gradient Boosting Regressor → Young Group
-  - XGBoost Regressor → Adult Group
+### 🧪 5️⃣ Model Training
+- **Linear Regression** — Young Group  
+- **XGBoost Regressor** — Adult Group  
+- Separate **StandardScaler** for each group
 
 ### 📊 6️⃣ Evaluation
 - R² Score  
 - RMSE  
-- Better performance after segmentation
+- Error distribution  
 
 ---
 
 ## 💾 Model Export 🚀
 
-Final saved files:
+Saved trained artifacts:
 
-model_young_gr.joblib
-xgb_model_old_gr.joblib
-scaler_young_gr.joblib
-scaler_old_gr.joblib
+model_young_lr.joblib  
+xgb_model_old_gr.joblib  
+scaler_young_gr.joblib  
+scaler_old_gr.joblib  
 
 
 ---
 
 ## 📦 Project Deliverables  
 
-This repository includes:
-- Jupyter Notebooks (EDA, Error Analysis, Young & Adult Models)
-- Final ML models and scalers (`.joblib`)
-- Streamlit App for premium prediction
-- README documentation 📘
+📁 Jupyter Notebooks  
+📁 Trained ML Models  
+📁 Streamlit App for Prediction  
+📁 Visual Analysis  
+📁 Documentation (this README)
 
 ---
 
 ## 🎯 Key Learnings  
-- **Segmented modeling** improves prediction logic  
-- **VIF** enhances model robustness  
-- Feature impact matters more than model complexity  
-- Practical insurance underwriting insights  
+- Age-based modeling improves accuracy  
+- Multicollinearity reduction = better ML stability  
+- Regression models differ by customer segments  
+- Insurance pricing domain insights  
 
 ---
 
 ## 📈 Results  
 
-| Model | Age Group | Best Metrics | Comments |
-|-------|----------|--------------|----------|
-| Gradient Boosting | ≤ 25 years | High R² • Low RMSE | Best fit for low-variance young cases |
-| XGBoost | > 25 years | Higher R² • Lower RMSE | Handles risk complexity better |
+| Model | Age Group | Best Metrics | Interpretation |
+|-------|----------|--------------|---------------|
+| **Linear Regression** | ≤ 25 years | High R² • Low RMSE | Premium trend is more linear among young |
+| **XGBoost** | > 25 years | Higher R² • Lower RMSE | Captures complex health risk interactions |
 
-📌 Performance increased significantly after **age-based modeling**
-
-## 📈 Results  
+---
 
 ### 🔹 Model Performance Visualizations
 
 <table>
   <tr>
     <td align="center">
-      <img src="visuals/actual_vs_predicted_young.png" width="270"/>
-      <br/><b>Actual vs Predicted (Young Group)</b>
-      <br/>Excellent alignment → stable predictions for low-variance customers.
+      <img src="visuals/actual_vs_predicted_young.png" width="260"/>
+      <br/><b>Actual vs Predicted (Young Group)</b><br/>
+      Strong linear fit for younger customers.
     </td>
     <td align="center">
-      <img src="visuals/error_distribution_young.png" width="270"/>
-      <br/><b>Error Distribution (Young Group)</b>
-      <br/>Errors mostly centered around zero → reliable model behavior.
+      <img src="visuals/error_distribution_young.png" width="260"/>
+      <br/><b>Error Distribution (Young Group)</b><br/>
+      Minimal prediction deviation.
     </td>
     <td align="center">
-      <img src="visuals/actual_vs_predicted_adult.png" width="270"/>
-      <br/><b>Actual vs Predicted (Adult Group)</b>
-      <br/>XGBoost handles complex risk patterns effectively in adults.
+      <img src="visuals/actual_vs_predicted_adult.png" width="260"/>
+      <br/><b>Actual vs Predicted (Adult Group)</b><br/>
+      XGBoost handles nonlinear risk better.
     </td>
   </tr>
   <tr>
     <td align="center">
-      <img src="visuals/error_distribution_adult.png" width="270"/>
-      <br/><b>Error Distribution (Adult Group)</b>
-      <br/>Good distribution → lower variance after age-based modeling.
+      <img src="visuals/error_distribution_adult.png" width="260"/>
+      <br/><b>Error Distribution (Adult Group)</b><br/>
+      Balanced predictions across risk levels.
     </td>
     <td align="center">
-      <img src="visuals/streamlit_interface.png" width="270"/>
-      <br/><b>Streamlit App UI</b>
-      <br/>Simple and user-friendly interface for premium prediction.
+      <img src="visuals/streamlit_interface.png" width="260"/>
+      <br/><b>Streamlit App UI</b><br/>
+      Simple UI for premium forecasting.
     </td>
     <td align="center">
       <b>🚀 Final Outcome</b><br/><br/>
-      ✔ Higher accuracy after model segmentation<br/>
-      ✔ Better risk estimation for business decisions<br/>
-      ✔ Fully deployable ML solution for Insurance Domain
+      ✔ Higher accuracy after segmentation<br/>
+      ✔ Effective business-driven model<br/>
+      ✔ Ready for real-world deployment
     </td>
   </tr>
 </table>
-
 
 ---
 
 ## 🛠 Tools & Technologies Used  
 
-- **Python**  
-- **Pandas, NumPy**  
-- **Matplotlib, Seaborn**  
-- **Scikit-learn**  
-- **Linear Regression**   
-- **XGBoost**  
-- **Streamlit**  
-- **Joblib**  
+- Python  
+- Pandas, NumPy  
+- Scikit-learn  
+- Linear Regression  
+- XGBoost  
+- Streamlit  
+- Joblib  
+- Matplotlib & Seaborn  
 
 ---
 
 ## 🧑‍💻 Skills Demonstrated  
 
-- Machine Learning Deployment  
-- Feature Engineering & Selection  
-- Multicollinearity Handling (VIF)  
-- Model Evaluation & Error Analysis  
-- Business-Driven ML Strategy  
-- Insurance Analytics  
+- Regression Modeling  
+- ML Deployment  
+- VIF-based feature selection  
+- Production-ready Streamlit UI  
+- Insurance data analytics  
 
 ---
 
